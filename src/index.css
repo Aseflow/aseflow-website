@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-feature-settings: 'kern' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #000000;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-feature-settings: 'kern' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.022em;
+    font-weight: 600;
+  }
+}
+
+@layer utilities {
+  /* Apple-style text effects */
+  .text-shadow-apple {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-glow {
+    text-shadow: 0 0 20px rgba(207, 175, 106, 0.2);
+  }
+  
+  /* Apple-style shadows */
+  .shadow-apple {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+  .shadow-apple-lg {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+  }
+  
+  .shadow-apple-xl {
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Apple-style backdrop blur */
+  .backdrop-blur-apple {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+  
+  /* Apple-style gradients */
+  .gradient-apple {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
+  }
+  
+  .gradient-premium {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(29, 29, 31, 0.95) 100%);
+  }
+  
+  .gradient-apple-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+  }
+  
+  /* Apple-style glow effects */
+  .glow-effect {
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.15));
+  }
+  
+  .glow-apple {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+  
+  /* Apple-style borders */
+  .border-apple {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .border-apple-light {
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  
+  /* Apple-style button effects */
+  .button-apple {
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .button-apple:hover {
+    transform: translateY(-1px);
+    background: #1d1d1f;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  
+  .button-apple-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .button-apple-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  /* Apple-style cards */
+  .card-apple {
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .card-apple:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .card-apple-dark {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .card-apple-dark:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 122, 255, 0.1);
+  }
+  
+  /* Apple-style animations */
+  .animate-apple-fade-in {
+    animation: appleFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .animate-apple-slide-up {
+    animation: appleSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .animate-apple-scale {
+    animation: appleScale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  /* Apple-style focus states */
+  .focus-apple {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+    transition: box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  /* Apple-style text treatments */
+  .text-apple-hero {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+  
+  .text-apple-body {
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+  }
+  
+  .text-apple-caption {
+    font-weight: 400;
+    letter-spacing: -0.008em;
+    line-height: 1.4;
+    opacity: 0.8;
+  }
+}
+
+@keyframes appleFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appleSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appleScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) }
+  50% { transform: translateY(-20px) }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) }
+  100% { transform: translateX(100%) }
+}
+
+@keyframes slideInLeft {
+  0% { transform: translateX(-100px); opacity: 0 }
+  100% { transform: translateX(0); opacity: 1 }
+}
+
+@keyframes slideInRight {
+  0% { transform: translateX(100px); opacity: 0 }
+  100% { transform: translateX(0); opacity: 1 }
+}
+
+@keyframes slideInUp {
+  0% { transform: translateY(50px); opacity: 0 }
+  100% { transform: translateY(0); opacity: 1 }
+}
+
+@keyframes fadeInUp {
+  0% { transform: translateY(30px); opacity: 0 }
+  100% { transform: translateY(0); opacity: 1 }
+}
+
+@keyframes typewriter {
+  0%, 50% { width: 0 }
+  100% { width: 100% }
+}
+
+@keyframes zoomIn {
+  0% { transform: scale(0.8); opacity: 0 }
+  100% { transform: scale(1); opacity: 1 }
+}
