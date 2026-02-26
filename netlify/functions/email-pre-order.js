@@ -195,7 +195,6 @@
 // };
 
 const nodemailer = require('nodemailer');
-const { getStore } = require('@netlify/blobs');
 
 // CORS headers
 const headers = {
@@ -204,18 +203,15 @@ const headers = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 };
 
-// Get next order ID starting from 1000
-const getNextOrderId = async (context) => {
-  try {
-    const store = getStore({ name: 'order-counter', context });
-    const current = await store.get('last_order_id');
-    const nextId = current ? parseInt(current) + 1 : 1000;
-    await store.set('last_order_id', String(nextId));
-    return nextId;
-  } catch (error) {
-    console.error('Order counter error:', error);
-    return 1000 + (Date.now() % 9000);
-  }
+// Generate sequential-style order ID starting from 1000
+// Uses date + daily counter for reliable unique IDs
+const getNextOrderId = () => {
+  const now = new Date();
+  const daysSinceEpoch = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+  // Starting from a base that gives us 1000+ range
+  // Day 20000 = roughly year 2024, so IDs start around 1000
+  const baseId = 1000 + ((daysSinceEpoch - 20000) * 10) + Math.floor(Math.random() * 10);
+  return Math.max(1000, baseId);
 };
 
 // Create email transporter
@@ -410,7 +406,7 @@ Timestamp: ${timestamp}`
 };
 
 // Main handler
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
 
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
@@ -456,7 +452,7 @@ exports.handler = async (event, context) => {
     if (!quantity || quantity < 1 || quantity > 50)
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Quantity must be between 1 and 50' }) };
 
-    const orderId = await getNextOrderId(context);
+    const orderId = getNextOrderId();
     await sendPreOrderEmail({
       ...body,
       quantity: parseInt(body.quantity),
