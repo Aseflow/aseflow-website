@@ -195,6 +195,7 @@
 // };
 
 const nodemailer = require('nodemailer');
+const { neon } = require('@neondatabase/serverless');
 
 // CORS headers
 const headers = {
@@ -203,15 +204,36 @@ const headers = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 };
 
-// Generate sequential-style order ID starting from 1000
-// Uses date + daily counter for reliable unique IDs
-const getNextOrderId = () => {
-  const now = new Date();
-  const daysSinceEpoch = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
-  // Starting from a base that gives us 1000+ range
-  // Day 20000 = roughly year 2024, so IDs start around 1000
-  const baseId = 1000 + ((daysSinceEpoch - 20000) * 10) + Math.floor(Math.random() * 10);
-  return Math.max(1000, baseId);
+// Get next sequential order ID starting from 1000 using Neon DB
+const getNextOrderId = async () => {
+  try {
+    const sql = neon(process.env.NETLIFY_DATABASE_URL);
+    // Create table if it doesn't exist
+    await sql`
+      CREATE TABLE IF NOT EXISTS order_counter (
+        id INTEGER PRIMARY KEY DEFAULT 1,
+        last_order_id INTEGER NOT NULL DEFAULT 999
+      )
+    `;
+    // Insert default row if not exists
+    await sql`
+      INSERT INTO order_counter (id, last_order_id)
+      VALUES (1, 999)
+      ON CONFLICT (id) DO NOTHING
+    `;
+    // Increment and return next ID atomically
+    const result = await sql`
+      UPDATE order_counter
+      SET last_order_id = last_order_id + 1
+      WHERE id = 1
+      RETURNING last_order_id
+    `;
+    return result[0].last_order_id;
+  } catch (error) {
+    console.error('Order counter error:', error);
+    // Fallback
+    return 1000 + Math.floor(Math.random() * 9000);
+  }
 };
 
 // Create email transporter
@@ -452,7 +474,7 @@ exports.handler = async (event) => {
     if (!quantity || quantity < 1 || quantity > 50)
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Quantity must be between 1 and 50' }) };
 
-    const orderId = getNextOrderId();
+    const orderId = await getNextOrderId();
     await sendPreOrderEmail({
       ...body,
       quantity: parseInt(body.quantity),
