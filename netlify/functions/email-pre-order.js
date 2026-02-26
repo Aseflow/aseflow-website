@@ -205,16 +205,15 @@ const headers = {
 };
 
 // Get next order ID starting from 1000
-const getNextOrderId = async () => {
+const getNextOrderId = async (context) => {
   try {
-    const store = getStore('order-counter');
+    const store = getStore({ name: 'order-counter', context });
     const current = await store.get('last_order_id');
     const nextId = current ? parseInt(current) + 1 : 1000;
     await store.set('last_order_id', String(nextId));
     return nextId;
   } catch (error) {
     console.error('Order counter error:', error);
-    // Fallback to timestamp-based ID if blobs fail
     return 1000 + (Date.now() % 9000);
   }
 };
@@ -411,7 +410,7 @@ Timestamp: ${timestamp}`
 };
 
 // Main handler
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
 
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
@@ -457,7 +456,7 @@ exports.handler = async (event) => {
     if (!quantity || quantity < 1 || quantity > 50)
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Quantity must be between 1 and 50' }) };
 
-    const orderId = await getNextOrderId();
+    const orderId = await getNextOrderId(context);
     await sendPreOrderEmail({
       ...body,
       quantity: parseInt(body.quantity),
