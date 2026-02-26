@@ -203,50 +203,41 @@ const headers = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 };
 
-// Get next sequential order ID using Neon HTTP API - no packages needed
+// Get next sequential order ID using Neon HTTP API
 const getNextOrderId = async () => {
   try {
     const dbUrl = process.env.NETLIFY_DATABASE_URL;
     if (!dbUrl) throw new Error('No database URL');
 
-    // Parse connection string
     const url = new URL(dbUrl);
     const host = url.hostname;
-    const user = decodeURIComponent(url.username);
-    const password = decodeURIComponent(url.password);
-    const database = url.pathname.replace('/', '');
 
-    const authHeader = 'Basic ' + Buffer.from(`${user}:${password}`).toString('base64');
+    // Helper to run a single query
+    const runQuery = async (query) => {
+      const res = await fetch(`https://${host}/sql`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Neon-Connection-String': dbUrl,
+        },
+        body: JSON.stringify({ query })
+      });
+      return res.json();
+    };
 
-    // Create table if not exists
-    await fetch(`https://${host}/sql`, {
-      method: 'POST',
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json',
-        'Neon-Connection-String': dbUrl,
-      },
-      body: JSON.stringify({
-        query: `CREATE TABLE IF NOT EXISTS order_counter (id INTEGER PRIMARY KEY DEFAULT 1, last_order_id INTEGER NOT NULL DEFAULT 999);
-                INSERT INTO order_counter (id, last_order_id) VALUES (1, 999) ON CONFLICT (id) DO NOTHING;`
-      })
-    });
+    // Step 1: Create table if not exists
+    await runQuery(`CREATE TABLE IF NOT EXISTS order_counter (id INTEGER PRIMARY KEY, last_order_id INTEGER NOT NULL DEFAULT 999)`);
 
-    // Atomically increment and get next ID
-    const res = await fetch(`https://${host}/sql`, {
-      method: 'POST',
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json',
-        'Neon-Connection-String': dbUrl,
-      },
-      body: JSON.stringify({
-        query: `UPDATE order_counter SET last_order_id = last_order_id + 1 WHERE id = 1 RETURNING last_order_id;`
-      })
-    });
+    // Step 2: Insert default row if not exists
+    await runQuery(`INSERT INTO order_counter (id, last_order_id) VALUES (1, 999) ON CONFLICT (id) DO NOTHING`);
 
-    const data = await res.json();
-    return data.rows[0].last_order_id;
+    // Step 3: Atomically increment and return next ID
+    const result = await runQuery(`UPDATE order_counter SET last_order_id = last_order_id + 1 WHERE id = 1 RETURNING last_order_id`);
+
+    if (result && result.rows && result.rows.length > 0) {
+      return result.rows[0].last_order_id;
+    }
+    throw new Error('No rows returned: ' + JSON.stringify(result));
   } catch (error) {
     console.error('Order counter error:', error);
     return 1000 + Math.floor(Math.random() * 9000);
