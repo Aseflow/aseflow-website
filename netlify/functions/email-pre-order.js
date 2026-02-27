@@ -244,6 +244,16 @@ const getNextOrderId = async () => {
   }
 };
 
+// Format order ID into premium format: ASF-PRE-2026-FEB-001000
+const formatOrderId = (numericId) => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const month = months[now.getMonth()];
+  const padded = String(numericId).padStart(6, '0');
+  return `ASF-PRE-${year}-${month}-${padded}`;
+};
+
 // Create email transporter
 const createTransporter = () => {
   try {
@@ -482,7 +492,8 @@ exports.handler = async (event) => {
     if (!quantity || quantity < 1 || quantity > 50)
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Quantity must be between 1 and 50' }) };
 
-    const orderId = await getNextOrderId();
+    const numericId = await getNextOrderId();
+    const orderId = formatOrderId(numericId);
     await sendPreOrderEmail({
       ...body,
       quantity: parseInt(body.quantity),
