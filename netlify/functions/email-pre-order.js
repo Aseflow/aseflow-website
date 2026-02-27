@@ -206,7 +206,7 @@ const headers = {
 // Get next sequential order ID using Neon HTTP API
 const getNextOrderId = async () => {
   try {
-    const dbUrl = process.env.NETLIFY_DATABASE_URL;
+    const dbUrl = process.env.NETLIFY_DATABASE_URL_UNPOOLED || process.env.NETLIFY_DATABASE_URL;
     if (!dbUrl) throw new Error('No database URL');
 
     const url = new URL(dbUrl);
@@ -488,6 +488,34 @@ exports.handler = async (event) => {
       quantity: parseInt(body.quantity),
       orderId
     });
+
+    // Save to Google Sheets via SheetDB
+    try {
+      const qty = parseInt(body.quantity);
+      const totalAmount = qty * 2999;
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      await fetch('https://sheetdb.io/api/v1/6eixxsivvae5n', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: [{
+            'Order ID': `#${orderId}`,
+            'Name': name,
+            'Email': email,
+            'Phone': phone,
+            'Address': address,
+            'Product Type': productType === 'marine' ? 'Marine Protein Shot' : 'Vegan Protein Shot',
+            'Quantity': qty,
+            'Total Amount': `₹${totalAmount}`,
+            'Timestamp': timestamp
+          }],
+          sheet: 'PreOrders'
+        })
+      });
+    } catch (sheetErr) {
+      console.error('SheetDB error:', sheetErr);
+      // Don't fail the order if sheets fails
+    }
 
     return {
       statusCode: 200,
