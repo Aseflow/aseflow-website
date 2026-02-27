@@ -11,20 +11,19 @@ const EarlyAccessPopup = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const hasSeenPopup = localStorage.getItem('aseflow_early_access_seen');
-
-    if (!hasSeenPopup) {
+    // Only hide permanently after they successfully submitted email
+    const hasSignedUp = localStorage.getItem('aseflow_early_access_submitted');
+    if (!hasSignedUp) {
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 3000);
-
       return () => clearTimeout(timer);
     }
   }, []);
 
   const handleClose = () => {
     setIsVisible(false);
-    localStorage.setItem('aseflow_early_access_seen', 'true');
+    // Do NOT save to localStorage on close - popup shows again next visit
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +46,8 @@ const EarlyAccessPopup = () => {
       trackEarlyAccessSubmit(email);
 
       setIsSuccess(true);
-      localStorage.setItem('aseflow_early_access_seen', 'true');
+      // Only save after successful submission - popup won't show again
+      localStorage.setItem('aseflow_early_access_submitted', 'true');
 
       setTimeout(() => {
         setIsVisible(false);
