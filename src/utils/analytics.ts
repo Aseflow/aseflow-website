@@ -77,7 +77,7 @@ export const trackPageView = (path: string) => {
     if (utmMedium) pageViewData.campaign_medium = utmMedium;
     if (utmCampaign) pageViewData.campaign_name = utmCampaign;
     
-    window.gtag('config', 'G-D9KRK38FY1', pageViewData);
+    window.gtag('config', 'G-086Z0JMQN5', pageViewData);
     
     if (utmSource || utmMedium || utmCampaign) {
       // UTM parameters are tracked via GA config above
