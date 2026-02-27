@@ -135,7 +135,6 @@ html: `
 
 // Main handler function
 exports.handler = async (event, context) => {
-  });
 
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
