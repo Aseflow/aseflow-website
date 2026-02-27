@@ -194,6 +194,26 @@ exports.handler = async (event, context) => {
 
     await sendNewsletterEmail(email, name, source);
 
+    // Save to Google Sheets via SheetDB
+    try {
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      await fetch('https://sheetdb.io/api/v1/6eixxsivvae5n', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: [{
+            'Email': email,
+            'Source': source || 'newsletter',
+            'Timestamp': timestamp
+          }],
+          sheet: 'EarlyAccess'
+        })
+      });
+    } catch (sheetErr) {
+      console.error('SheetDB error:', sheetErr);
+      // Don't fail the signup if sheets fails
+    }
+
     return {
       statusCode: 200,
       headers,
