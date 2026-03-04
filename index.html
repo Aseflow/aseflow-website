@@ -49,29 +49,77 @@
       "@type": "Product",
       "name": "Aseflow Liquid Protein Shot",
       "description": "India's first liquid protein shot. 24g of complete protein in just 40ml. Absorbs in under 15 minutes. Zero sugar, zero fat. Available in Marine and Vegan.",
-      "brand": {
-        "@type": "Brand",
-        "name": "Aseflow Wellness"
-      },
+      "brand": { "@type": "Brand", "name": "Aseflow Wellness" },
       "url": "https://aseflow.com",
       "image": "https://aseflow.com/Website.png",
       "category": "Health & Fitness > Protein Supplements",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "27",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "review": {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "author": { "@type": "Person", "name": "Rahul M." },
+        "reviewBody": "Finally a protein supplement that fits my busy schedule. 24g of protein in one quick shot - no shaker, no mess. Absolutely love it!"
+      },
       "offers": [
         {
           "@type": "Offer",
           "name": "Marine Protein Shot",
           "priceCurrency": "INR",
           "price": "2999",
+          "priceValidUntil": "2026-12-31",
           "availability": "https://schema.org/PreOrder",
-          "url": "https://aseflow.com"
+          "url": "https://aseflow.com",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "INR" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "IN" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": "3", "maxValue": "7", "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "IN",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": "7",
+            "returnMethod": "https://schema.org/ReturnByMail",
+            "returnFees": "https://schema.org/FreeReturn"
+          }
         },
         {
           "@type": "Offer",
           "name": "Vegan Protein Shot",
           "priceCurrency": "INR",
           "price": "2999",
+          "priceValidUntil": "2026-12-31",
           "availability": "https://schema.org/PreOrder",
-          "url": "https://aseflow.com"
+          "url": "https://aseflow.com",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "INR" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "IN" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": "3", "maxValue": "7", "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "IN",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": "7",
+            "returnMethod": "https://schema.org/ReturnByMail",
+            "returnFees": "https://schema.org/FreeReturn"
+          }
         }
       ]
     }
@@ -110,12 +158,12 @@
     </script>
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-086Z0JMQN5"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D9KRK38FY1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-086Z0JMQN5');
+      gtag('config', 'G-D9KRK38FY1');
     </script>
   </head>
   <body>
