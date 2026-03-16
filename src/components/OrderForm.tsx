@@ -99,7 +99,8 @@ const OrderForm = () => {
     }
   };
 
-  const totalPrice = formData.quantity * 2999;
+  const getUnitPrice = () => formData.productType === 'trial' ? 799 : 2999;
+  const totalPrice = formData.quantity * getUnitPrice();
 
   return (
     <section id="order" className="py-32 bg-gray-50" ref={sectionRef}>
@@ -218,8 +219,9 @@ const OrderForm = () => {
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200"
                     disabled={isSubmitting}
                   >
-                    <option value="marine">Marine Protein</option>
-                    <option value="vegan">Vegan Protein</option>
+                    <option value="trial">⚡ Trial Pack — 6 Shots (₹799)</option>
+                    <option value="marine">Marine Protein — 30 Shots (₹2,999)</option>
+                    <option value="vegan">Vegan Protein — 30 Shots (₹2,999)</option>
                   </select>
                 </div>
               </div>
@@ -264,10 +266,10 @@ const OrderForm = () => {
 
                 <div className="text-right">
                   <div className="text-gray-500 font-light mb-1">Total Amount</div>
-                  <div className="text-lg text-gray-400 font-light line-through">₹{formData.quantity * 4999}</div>
+                  <div className="text-lg text-gray-400 font-light line-through">₹{formData.productType === 'trial' ? formData.quantity * 1499 : formData.quantity * 4999}</div>
                   <div className="text-3xl font-light text-black">
                     ₹{totalPrice}
-                    <span className="text-sm text-gray-500 font-light ml-2">(40% off)</span>
+                    <span className="text-sm text-gray-500 font-light ml-2">({formData.productType === 'trial' ? '47% off' : '40% off'})</span>
                   </div>
                 </div>
               </div>
