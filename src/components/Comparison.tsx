@@ -1,5 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
+
+const comparisons = [
+  {
+    feature: "Absorption",
+    powder: "90–120 minutes",
+    aseflow: "Under 15 minutes"
+  },
+  {
+    feature: "Preparation",
+    powder: "Mix, measure, clean",
+    aseflow: "Open. Drink. Done."
+  },
+  {
+    feature: "Portability",
+    powder: "Bulky tubs and shakers",
+    aseflow: "40ml. Fits anywhere."
+  },
+  {
+    feature: "Convenience",
+    powder: "Needs water, shaker, time",
+    aseflow: "Zero equipment. Zero prep."
+  },
+  {
+    feature: "Precision",
+    powder: "Inconsistent scoops",
+    aseflow: "Exact dose. Every time."
+  }
+];
 
 const Comparison = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -7,141 +35,106 @@ const Comparison = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.1 }
     );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
-
-  const comparisons = [
-    {
-      feature: "Absorption Time",
-      traditional: "90-120 minutes",
-      aseflow: "Under 15 minutes"
-    },
-    {
-      feature: "Preparation",
-      traditional: "Mixing, measuring, cleaning",
-      aseflow: "Ready to drink"
-    },
-    {
-      feature: "Portability",
-      traditional: "Bulky containers",
-      aseflow: "40ml compact shot"
-    },
-    {
-      feature: "Convenience",
-      traditional: "Requires shaker + water",
-      aseflow: "No equipment needed"
-    }
-  ];
 
   return (
     <section ref={sectionRef} id="comparison" className="py-32 bg-white">
       <div className="container mx-auto px-6">
-        
-        {/* Header */}
-        <div className={`text-center mb-20 transform transition-all duration-1000 ${
+
+        {/* Header — left aligned, confident */}
+        <div className={`max-w-5xl mx-auto mb-20 transform transition-all duration-1000 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
-          <h2 className="text-4xl md:text-6xl font-light mb-6 tracking-tight text-black">
-            Traditional vs
-            <br />
-            <span className="font-normal">Revolutionary</span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-light">
-            A fundamental reimagining of protein supplementation.
+          <p className="text-xs font-medium tracking-[0.3em] text-gray-300 uppercase mb-8">
+            A Better Way Exists
           </p>
+          <h2 className="text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-black">
+            The world moved on.
+            <br />
+            <span className="text-gray-300">Protein should too.</span>
+          </h2>
         </div>
 
-        {/* Comparison Table */}
+        {/* Comparison — asymmetric layout */}
         <div className="max-w-5xl mx-auto">
-          
-          {/* Headers */}
-          <div className={`grid grid-cols-3 gap-8 mb-12 transform transition-all duration-1000 delay-300 ${
+
+          {/* Column headers */}
+          <div className={`grid grid-cols-7 gap-4 mb-6 transform transition-all duration-1000 delay-200 ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
-            <div></div>
-            <div className="text-center">
-              <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                <h3 className="text-lg font-medium text-gray-700 mb-2">Traditional Protein</h3>
-                <p className="text-sm text-gray-500">Powder supplements</p>
+            {/* Feature label space */}
+            <div className="col-span-3"/>
+
+            {/* Powder — small, faded, past */}
+            <div className="col-span-2 text-center">
+              <div className="inline-block px-4 py-2 rounded-full border border-gray-100">
+                <p className="text-xs text-gray-300 font-light tracking-widest uppercase">Powder</p>
               </div>
             </div>
-            <div className="text-center">
-              <div className="bg-black rounded-2xl p-6">
-                <h3 className="text-lg font-medium text-white mb-2">Aseflow</h3>
-                <p className="text-sm text-gray-300">Liquid protein shot</p>
+
+            {/* Aseflow — dominant, alive */}
+            <div className="col-span-2 text-center">
+              <div className="inline-block bg-black px-6 py-2 rounded-full">
+                <p className="text-xs text-white font-medium tracking-widest uppercase">Aseflow</p>
               </div>
             </div>
           </div>
 
-          {/* Comparison Rows */}
-          <div className="space-y-6">
-            {comparisons.map((comparison, index) => (
-              <div 
+          {/* Rows */}
+          <div className="space-y-0">
+            {comparisons.map((row, index) => (
+              <div
                 key={index}
-                className={`grid grid-cols-3 gap-8 items-center py-6 border-b border-gray-100 last:border-b-0 transform transition-all duration-1000 ${
+                className={`grid grid-cols-7 gap-4 items-center py-6 border-t border-gray-100 transform transition-all duration-700 ${
                   isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                 }`}
-                style={{ animationDelay: `${(index + 1) * 200}ms` }}
+                style={{ transitionDelay: `${(index + 2) * 100}ms` }}
               >
                 {/* Feature */}
-                <div>
-                  <h4 className="text-lg font-medium text-black">{comparison.feature}</h4>
+                <div className="col-span-3">
+                  <p className="text-base font-medium text-black">{row.feature}</p>
                 </div>
 
-                {/* Traditional */}
-                <div className="text-center">
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                    <div className="flex items-center justify-center gap-3 mb-2">
-                      <X className="w-5 h-5 text-gray-400" />
-                    </div>
-                    <span className="text-gray-600 font-light">{comparison.traditional}</span>
-                  </div>
+                {/* Powder — grey, small, tired */}
+                <div className="col-span-2 text-center">
+                  <p className="text-sm text-gray-300 font-light leading-snug">{row.powder}</p>
                 </div>
 
-                {/* Aseflow */}
-                <div className="text-center">
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                    <div className="flex items-center justify-center gap-3 mb-2">
-                      <Check className="w-5 h-5 text-black" />
-                    </div>
-                    <span className="text-black font-medium">{comparison.aseflow}</span>
+                {/* Aseflow — black, bold, alive */}
+                <div className="col-span-2">
+                  <div className="bg-black rounded-2xl px-5 py-3 flex items-center gap-3">
+                    <Check className="w-4 h-4 text-white flex-shrink-0"/>
+                    <p className="text-sm text-white font-medium leading-snug">{row.aseflow}</p>
                   </div>
                 </div>
               </div>
             ))}
+
+            {/* Bottom border */}
+            <div className="border-t border-gray-100"/>
           </div>
 
-          {/* Bottom Statement */}
-          <div className={`text-center mt-20 transform transition-all duration-1000 delay-1000 ${
+          {/* Bottom CTA — not a box, just a line */}
+          <div className={`mt-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 transform transition-all duration-1000 delay-700 ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
-            <div className="bg-gray-50 rounded-2xl p-12 border border-gray-200">
-              <h3 className="text-2xl md:text-3xl font-light text-black mb-6">
-                The future of protein is here.
-              </h3>
-              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto font-light">
-                Experience the next generation of nutrition technology.
-              </p>
-              <button 
-                onClick={() => document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-black text-white font-medium py-4 px-8 rounded-full transition-all duration-300 hover:bg-gray-800"
-              >
-                Experience Aseflow
-              </button>
-            </div>
+            <p className="text-2xl md:text-3xl font-light text-black max-w-lg leading-tight tracking-tight">
+              The science was always there.
+              <span className="text-gray-300"> Someone just had to build it right.</span>
+            </p>
+            <button
+              onClick={() => document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' })}
+              className="flex-shrink-0 bg-black text-white font-light text-sm tracking-[0.15em] uppercase py-4 px-10 rounded-full hover:bg-gray-900 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Secure My First Batch
+            </button>
           </div>
+
         </div>
       </div>
     </section>
