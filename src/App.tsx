@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Benefits from './components/Benefits';
@@ -9,32 +9,18 @@ import Trust from './components/Trust';
 import UseCases from './components/UseCases';
 import Products from './components/Products';
 import OrderForm from './components/OrderForm';
-import ReferralShare from './components/ReferralShare';
 import Footer from './components/Footer';
 import EarlyAccessPopup from './components/EarlyAccessPopup';
-import WhatsAppButton from './components/WhatsAppButton';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import TermsOfService from './components/TermsOfService';
 import { trackPageView } from './utils/analytics';
 
 function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
-
   useEffect(() => {
+    // Track initial page view with UTM parameters
     trackPageView(window.location.pathname);
   }, []);
 
-  useEffect(() => {
-    const handlePopState = () => setCurrentPath(window.location.pathname);
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  if (currentPath === '/privacy-policy') return <PrivacyPolicy />;
-  if (currentPath === '/terms-of-service') return <TermsOfService />;
-
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-brand-dark text-white">
       <Header />
       <Hero />
       <Benefits />
@@ -44,10 +30,8 @@ function App() {
       <UseCases />
       <Products />
       <OrderForm />
-      <ReferralShare />
       <Footer />
       <EarlyAccessPopup />
-      <WhatsAppButton />
     </div>
   );
 }
