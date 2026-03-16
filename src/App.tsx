@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import Benefits from './components/Benefits';
 import ProductImage from './components/ProductImage';
+import About from './components/About';
 import Comparison from './components/Comparison';
 import Trust from './components/Trust';
 import UseCases from './components/UseCases';
@@ -15,7 +16,6 @@ import { trackPageView } from './utils/analytics';
 
 function App() {
   useEffect(() => {
-    // Track initial page view with UTM parameters
     trackPageView(window.location.pathname);
   }, []);
 
@@ -25,6 +25,7 @@ function App() {
       <Hero />
       <Benefits />
       <ProductImage />
+      <About />
       <Comparison />
       <Trust />
       <UseCases />
