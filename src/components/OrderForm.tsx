@@ -75,7 +75,7 @@ const OrderForm = () => {
         event_category: 'conversion',
         product_type: formData.productType,
         quantity: formData.quantity,
-        value: formData.quantity * 2999
+        value: formData.quantity * (formData.productType === 'trial' ? 799 : 2999)
       });
       
       setIsSubmitted(true);
@@ -220,8 +220,8 @@ const OrderForm = () => {
                     disabled={isSubmitting}
                   >
                     <option value="trial">⚡ Trial Pack — 6 Shots (₹799)</option>
-                    <option value="marine">Marine Protein — 30 Shots (₹2,999)</option>
-                    <option value="vegan">Vegan Protein — 30 Shots (₹2,999)</option>
+                    <option value="marine">Marine Protein — 26 Shots (₹2,999)</option>
+                    <option value="vegan">Vegan Protein — 26 Shots (₹2,999)</option>
                   </select>
                 </div>
               </div>
