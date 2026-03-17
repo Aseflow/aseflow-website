@@ -1,199 +1,3 @@
-// const nodemailer = require('nodemailer');
-
-// // CORS headers
-// const headers = {
-//   'Access-Control-Allow-Origin': '*',
-//   'Access-Control-Allow-Headers': 'Content-Type',
-//   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-// };
-
-// // Create email transporter
-// const createTransporter = () => {
-//   try {
-//     return nodemailer.createTransport({
-//       host: process.env.ZOHO_HOST || 'smtp.zoho.in',
-//       port: parseInt(process.env.ZOHO_PORT) || 465,
-//       secure: true,
-//       auth: {
-//         user: process.env.ZOHO_EMAIL,
-//         pass: process.env.ZOHO_PASSWORD,
-//       },
-//       tls: {
-//         rejectUnauthorized: false,
-//       },
-//     });
-//   } catch (error) {
-//     console.error('Failed to create transporter:', error);
-//     throw new Error('Email configuration error: ' + error.message);
-//   }
-// };
-
-// // Validation functions
-// const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-// const validatePhone = (phone) => /^\+?[\d\s\-\(\)]{10,15}$/.test(phone);
-
-// // Pre-order email service
-// const sendPreOrderEmail = async (orderData) => {
-//   try {
-//     const transporter = createTransporter();
-//     const { name, email, phone, address, productType, quantity } = orderData;
-//     const qty = parseInt(quantity); 
-//     const userName = name || 'there';
-//     const fromEmail = process.env.ZOHO_EMAIL || 'info@aseflow.com';
-//     const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-//     const totalAmount = qty * 2999;
-//     const originalAmount = qty * 4999;
-//     const savings = originalAmount - totalAmount;
-
-//     const userMailOptions = {
-//       from: fromEmail,
-//       to: email,
-//       subject: 'Your Pre-Order is Confirmed!',
-//       html: 
-//         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-//           <div style="background-color: #1A1A1A; padding: 30px; border-radius: 10px; text-align: center;">
-//             <h1 style="color: #D4AF37; font-size: 32px; margin-bottom: 10px; font-weight: bold;">ASEFLOW</h1>
-//             <p style="color: #D4AF37; font-size: 16px; margin-bottom: 30px;">WELLNESS</p>
-//             <h2 style="color: white; font-size: 24px; margin-bottom: 20px;">Pre-Order Confirmed! 🎉</h2>
-//             <div style="background-color: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 8px; margin: 20px 0;">
-//               <p style="color: white; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-//                 Hi ${userName},<br><br>
-//                 Thanks for pre-ordering Aseflow! As a special thank you, here's your exclusive discount code:
-//               </p>
-//               <div style="background-color: #D4AF37; color: #1A1A1A; padding: 15px; border-radius: 8px; font-size: 24px; font-weight: bold; margin: 20px 0;">
-//                 ASE30
-//               </div>
-//               <p style="color: #D4AF37; font-size: 14px; margin-bottom: 20px;">
-//                 30% OFF your next order!
-//               </p>
-//               <p style="color: white; font-size: 16px;">
-//                 We'll notify you once your order is ready to ship.
-//               </p>
-//             </div>
-//             <div style="margin: 30px 0;">
-//               <p style="color: #D4AF37; font-size: 18px; font-weight: bold;">RIP IT, SIP IT, REPEAT</p>
-//             </div>
-//             <p style="color: white; font-size: 16px;">
-//               Cheers,<br>
-//               <strong style="color: #D4AF37;">Team Aseflow</strong>
-//             </p>
-//           </div>
-//         </div>
-//       ,
-//       text: Hi ${userName},\n\nThanks for pre-ordering Aseflow! Here's your 30% OFF discount code: ASE30.\n\nWe'll notify you once your order is ready to ship.\n\nCheers,\nTeam Aseflow
-//     };
-
-//     const adminMailOptions = {
-//       from: fromEmail,
-//       to: fromEmail,
-//       subject: 'New Pre-Order Received - Aseflow',
-//       html: 
-//         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-//           <h2 style="color: #1A1A1A;">New Pre-Order Received</h2>
-//           <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #D4AF37;">
-//             <h3 style="color: #1A1A1A; margin-top: 0;">Customer Details:</h3>
-//             <p><strong>Name:</strong> ${name}</p>
-//             <p><strong>Email:</strong> ${email}</p>
-//             <p><strong>Phone:</strong> ${phone}</p>
-//             <p><strong>Address:</strong> ${address}</p>
-//             <h3 style="color: #1A1A1A;">Order Details:</h3>
-//             <p><strong>Product Type:</strong> ${productType}</p>
-//             <p><strong>Quantity:</strong> ${quantity}</p>
-//             <p><strong>Original Price:</strong> ₹${originalAmount}</p>
-//             <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
-//             <p><strong>You Saved:</strong> ₹${savings} (40% OFF)</p>
-//             <p><strong>Timestamp:</strong> ${timestamp}</p>
-//           </div>
-//         </div>
-//       ,
-// text: `Customer Details:
-// Name: ${name}
-// Email: ${email}
-// Phone: ${phone}
-// Address: ${address}
-
-// Order Details:
-// Product Type: ${productType}
-// Quantity: ${quantity}
-// Total Amount: ₹${totalAmount}
-// Timestamp: ${timestamp}`
-
-//     };
-
-//     await Promise.all([
-//       transporter.sendMail(userMailOptions),
-//       transporter.sendMail(adminMailOptions)
-//     ]);
-//   } catch (error) {
-//     console.error('Pre-order email error:', error);
-//     throw new Error('Failed to send email: ' + error.message);
-//   }
-// };
-
-// // Main handler
-// exports.handler = async (event, context) => {
-
-//   if (event.httpMethod === 'OPTIONS') {
-//     return { statusCode: 200, headers, body: '' };
-//   }
-
-//   if (event.httpMethod !== 'POST') {
-//     return {
-//       statusCode: 405,
-//       headers,
-//       body: JSON.stringify({ error: 'Method not allowed' }),
-//     };
-//   }
-
-//   try {
-//     const body = JSON.parse(event.body || '{}');
-//     const { name, email, phone, address, productType, quantity } = body;
-
-//     // Env check
-//     if (!process.env.ZOHO_EMAIL || !process.env.ZOHO_PASSWORD) {
-//       return {
-//         statusCode: 500,
-//         headers,
-//         body: JSON.stringify({ error: 'Email service not configured properly' }),
-//       };
-//     }
-
-//     // Validation
-//     if (!name || name.trim().length < 2)
-//       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Name must be at least 2 characters' }) };
-
-//     if (!email || !validateEmail(email))
-//       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Valid email is required' }) };
-
-//     if (!phone || !validatePhone(phone))
-//       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Valid phone number is required' }) };
-
-//     if (!address || address.trim().length < 10)
-//       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Address must be at least 10 characters' }) };
-
-//     if (!productType || !['marine', 'vegan'].includes(productType))
-//       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Product must be marine or vegan' }) };
-
-//     if (!quantity || quantity < 1 || quantity > 50)
-//       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Quantity must be between 1 and 50' }) };
-
-//     await sendPreOrderEmail(body);
-
-//     return {
-//       statusCode: 200,
-//       headers,
-//       body: JSON.stringify({ success: true, message: 'Pre-order confirmed! Check your email for details.' }),
-//     };
-//   } catch (error) {
-//     console.error('Handler error:', error);
-//     return {
-//       statusCode: 500,
-//       headers,
-//       body: JSON.stringify({ error: 'Internal error', message: error.message }),
-//     };
-//   }
-// };
-
 const nodemailer = require('nodemailer');
 
 // CORS headers
@@ -203,277 +7,210 @@ const headers = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 };
 
-// Get next sequential order ID using Neon HTTP API
-const getNextOrderId = async () => {
-  try {
-    const dbUrl = process.env.NETLIFY_DATABASE_URL_UNPOOLED || process.env.NETLIFY_DATABASE_URL;
-    if (!dbUrl) throw new Error('No database URL');
-
-    const url = new URL(dbUrl);
-    const host = url.hostname;
-
-    // Helper to run a single query
-    const runQuery = async (query) => {
-      const res = await fetch(`https://${host}/sql`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Neon-Connection-String': dbUrl,
-        },
-        body: JSON.stringify({ query })
-      });
-      return res.json();
-    };
-
-    // Step 1: Create table if not exists
-    await runQuery(`CREATE TABLE IF NOT EXISTS order_counter (id INTEGER PRIMARY KEY, last_order_id INTEGER NOT NULL DEFAULT 999)`);
-
-    // Step 2: Insert default row if not exists
-    await runQuery(`INSERT INTO order_counter (id, last_order_id) VALUES (1, 999) ON CONFLICT (id) DO NOTHING`);
-
-    // Step 3: Atomically increment and return next ID
-    const result = await runQuery(`UPDATE order_counter SET last_order_id = last_order_id + 1 WHERE id = 1 RETURNING last_order_id`);
-
-    if (result && result.rows && result.rows.length > 0) {
-      return result.rows[0].last_order_id;
-    }
-    throw new Error('No rows returned: ' + JSON.stringify(result));
-  } catch (error) {
-    console.error('Order counter error:', error);
-    return 1000 + Math.floor(Math.random() * 9000);
-  }
-};
-
-// Format order ID into premium format: ASF-PRE-2026-FEB-001000
-const formatOrderId = (numericId) => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  const month = months[now.getMonth()];
-  const padded = String(numericId).padStart(6, '0');
-  return `ASF-PRE-${year}-${month}-${padded}`;
-};
-
-// Create email transporter
+// Email transporter
 const createTransporter = () => {
-  try {
-    return nodemailer.createTransport({
-      host: process.env.ZOHO_HOST || 'smtp.zoho.in',
-      port: parseInt(process.env.ZOHO_PORT) || 465,
-      secure: true,
-      auth: {
-        user: process.env.ZOHO_EMAIL,
-        pass: process.env.ZOHO_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
-  } catch (error) {
-    console.error('Failed to create transporter:', error);
-    throw new Error('Email configuration error: ' + error.message);
-  }
+  return nodemailer.createTransport({
+    host: process.env.ZOHO_HOST || 'smtp.zoho.in',
+    port: parseInt(process.env.ZOHO_PORT) || 465,
+    secure: true,
+    auth: {
+      user: process.env.ZOHO_EMAIL,
+      pass: process.env.ZOHO_PASSWORD,
+    },
+    tls: { rejectUnauthorized: false },
+  });
 };
 
-// Validation functions
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 const validatePhone = (phone) => /^\+?[\d\s\-\(\)]{10,15}$/.test(phone);
 
-// Pre-order email service
-const sendPreOrderEmail = async (orderData) => {
+// ── PRICING ─────────────────────────────────────────────
+const getPricing = (productType, quantity) => {
+  const qty = parseInt(quantity) || 1;
+  if (productType === 'trial') {
+    return {
+      unitPrice: 799,
+      unitMRP: 1499,
+      totalAmount: qty * 799,
+      originalAmount: qty * 1499,
+      discount: '47%',
+      shots: '6 shots',
+      label: 'Trial Pack'
+    };
+  }
+  return {
+    unitPrice: 2999,
+    unitMRP: 4999,
+    totalAmount: qty * 2999,
+    originalAmount: qty * 4999,
+    discount: '40%',
+    shots: '26 shots',
+    label: productType === 'marine' ? 'Marine Protein' : 'Vegan Protein'
+  };
+};
+
+// ── GOOGLE SHEETS ────────────────────────────────────────
+const saveToSheets = async (orderData) => {
   try {
-    const transporter = createTransporter();
-    const { name, email, phone, address, productType, quantity, orderId } = orderData;
+    const sheetUrl = process.env.SHEETDB_URL;
+    if (!sheetUrl) {
+      console.log('SHEETDB_URL not set — skipping sheets write');
+      return;
+    }
 
-    const qty = parseInt(quantity);
-    const userName = name || 'there';
-    const fromEmail = process.env.ZOHO_EMAIL || 'info@aseflow.com';
-    const timestamp = new Date().toLocaleString('en-IN', {
-  timeZone: 'Asia/Kolkata',
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: '2-digit',
-  hour12: true,
-  timeZoneName: 'short'
-});
+    const { name, email, phone, address, productType, quantity, pricing, orderId, timestamp } = orderData;
 
+    await fetch(sheetUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: {
+          'Order ID': orderId || '',
+          'Timestamp': timestamp,
+          'Name': name,
+          'Email': email,
+          'Phone': phone,
+          'Address': address,
+          'Product': pricing.label,
+          'Shots': pricing.shots,
+          'Quantity': quantity,
+          'Unit Price': `₹${pricing.unitPrice}`,
+          'Total Amount': `₹${pricing.totalAmount}`,
+          'Discount': pricing.discount,
+        }
+      })
+    });
 
-    const totalAmount = qty * 2999;
-    const originalAmount = qty * 4999;
-
-    const userMailOptions = {
-      from: `"Aseflow Wellness" <${fromEmail}>`,
-      replyTo: fromEmail,
-      to: email,
-      subject: `Order Confirmed – Your Aseflow Pre-Order #${orderId}`,
-      headers: { 'X-Priority': '3', 'X-Mailer': 'Aseflow Mailer', 'List-Unsubscribe': `<mailto:${fromEmail}?subject=unsubscribe>` },
-      html: `
-        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-
-          <!-- Header -->
-          <div style="padding: 48px 48px 32px 48px; border-bottom: 1px solid #f0f0f0;">
-            <h1 style="margin: 0; font-size: 22px; font-weight: 400; color: #000000; letter-spacing: 4px;">ASEFLOW</h1>
-            <p style="margin: 4px 0 0 0; font-size: 12px; color: #999999; letter-spacing: 2px;">INDIA'S FIRST LIQUID PROTEIN SHOT</p>
-          </div>
-
-          <!-- Hero -->
-          <div style="padding: 48px 48px 40px 48px;">
-            <p style="margin: 0 0 8px 0; font-size: 13px; color: #999999; letter-spacing: 2px; text-transform: uppercase;">Order Confirmed</p>
-            <h2 style="margin: 0 0 20px 0; font-size: 36px; font-weight: 300; color: #000000; line-height: 1.2;">Thank you,<br/>${userName}.</h2>
-            <p style="margin: 0; font-size: 16px; color: #666666; line-height: 1.7; font-weight: 300;">
-              Your pre-order has been received. We'll contact you soon to confirm delivery details. Payment will be collected at the time of delivery.
-            </p>
-          </div>
-
-          <!-- Order Summary -->
-          <div style="margin: 0 48px; background-color: #f9f9f9; border-radius: 12px; padding: 32px;">
-            <p style="margin: 0 0 20px 0; font-size: 11px; color: #999999; letter-spacing: 2px; text-transform: uppercase;">Order Summary</p>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 10px 0; font-size: 14px; color: #666666; font-weight: 300; border-bottom: 1px solid #eeeeee;">Order ID</td>
-                <td style="padding: 10px 0; font-size: 14px; color: #000000; font-weight: 500; text-align: right; border-bottom: 1px solid #eeeeee;">#${orderId}</td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; font-size: 14px; color: #666666; font-weight: 300; border-bottom: 1px solid #eeeeee;">Product</td>
-                <td style="padding: 10px 0; font-size: 14px; color: #000000; font-weight: 400; text-align: right; border-bottom: 1px solid #eeeeee;">${productType === 'marine' ? 'Marine Protein Shot' : 'Vegan Protein Shot'}</td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; font-size: 14px; color: #666666; font-weight: 300; border-bottom: 1px solid #eeeeee;">Quantity</td>
-                <td style="padding: 10px 0; font-size: 14px; color: #000000; font-weight: 400; text-align: right; border-bottom: 1px solid #eeeeee;">${qty}</td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; font-size: 14px; color: #666666; font-weight: 300; border-bottom: 1px solid #eeeeee;">MRP</td>
-                <td style="padding: 10px 0; font-size: 14px; color: #999999; font-weight: 300; text-align: right; text-decoration: line-through; border-bottom: 1px solid #eeeeee;">₹${originalAmount}</td>
-              </tr>
-              <tr>
-                <td style="padding: 14px 0 0 0; font-size: 16px; color: #000000; font-weight: 500;">Total (40% off)</td>
-                <td style="padding: 14px 0 0 0; font-size: 20px; color: #000000; font-weight: 400; text-align: right;">₹${totalAmount}</td>
-              </tr>
-            </table>
-          </div>
-
-          <!-- Discount Code -->
-          <div style="margin: 24px 48px; border: 1px solid #000000; border-radius: 12px; padding: 28px; text-align: center;">
-            <p style="margin: 0 0 8px 0; font-size: 11px; color: #999999; letter-spacing: 2px; text-transform: uppercase;">Your Exclusive Discount</p>
-            <p style="margin: 0 0 12px 0; font-size: 32px; font-weight: 500; color: #000000; letter-spacing: 6px;">ASE30</p>
-            <p style="margin: 0; font-size: 13px; color: #666666; font-weight: 300;">30% OFF on your next order</p>
-          </div>
-
-          <!-- Social Links -->
-          <div style="padding: 32px 48px; text-align: center; border-top: 1px solid #f0f0f0; margin-top: 24px;">
-            <p style="margin: 0 0 16px 0; font-size: 13px; color: #999999; font-weight: 300;">Follow us & stay updated</p>
-            <a href="https://www.instagram.com/aseflowwellness" style="display: inline-block; margin: 0 8px; padding: 10px 20px; background-color: #000000; color: #ffffff; text-decoration: none; border-radius: 50px; font-size: 12px; letter-spacing: 1px;">Instagram</a>
-            <a href="https://wa.me/918432706701" style="display: inline-block; margin: 0 8px; padding: 10px 20px; background-color: #000000; color: #ffffff; text-decoration: none; border-radius: 50px; font-size: 12px; letter-spacing: 1px;">WhatsApp</a>
-          </div>
-
-          <!-- Footer -->
-          <div style="padding: 24px 48px 48px 48px; text-align: center;">
-            <p style="margin: 0 0 4px 0; font-size: 13px; color: #000000; font-weight: 400; letter-spacing: 2px;">RIP IT. SIP IT. REPEAT.</p>
-            <p style="margin: 16px 0 0 0; font-size: 12px; color: #bbbbbb; font-weight: 300;">© 2026 Aseflow Wellness. All rights reserved.</p>
-          </div>
-
-        </div>`,
-      text: `Hi ${userName},
-
-Your Aseflow pre-order is confirmed!
-
-ORDER SUMMARY
-Product: ${productType === 'marine' ? 'Marine Protein Shot' : 'Vegan Protein Shot'}
-Quantity: ${qty}
-Total: ₹${totalAmount} (40% off ₹${originalAmount})
-
-YOUR DISCOUNT CODE: ASE30
-30% OFF on your next order.
-
-We'll contact you soon with delivery details. Payment on delivery.
-
-Follow us:
-Instagram: instagram.com/aseflowwellness
-WhatsApp: +91 8432706701
-
-RIP IT. SIP IT. REPEAT.
-Team Aseflow`
-    };
-
-    const adminMailOptions = {
-      from: `"Aseflow Wellness" <${fromEmail}>`,
-      replyTo: fromEmail,
-      to: fromEmail,
-      subject: `🛍️ New Pre-Order #${orderId} – ${name} (₹${totalAmount})`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #1A1A1A;">New Pre-Order Received</h2>
-          <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #D4AF37;">
-            <h3 style="color: #1A1A1A; margin-top: 0;">Customer Details:</h3>
-            <p><strong>Order ID:</strong> #${orderId}</p>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Address:</strong> ${address}</p>
-            <h3 style="color: #1A1A1A;">Order Details:</h3>
-            <p><strong>Product Type:</strong> ${productType}</p>
-            <p><strong>Quantity:</strong> ${qty}</p>
-            <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
-            <p><strong>Timestamp:</strong> ${timestamp}</p>
-          </div>
-        </div>`,
-      text: `New Pre-Order Received
-
-Customer Details:
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Address: ${address}
-
-Order Details:
-Product Type: ${productType}
-Quantity: ${qty}
-Total Amount: ₹${totalAmount}
-Timestamp: ${timestamp}`
-    };
-
-    await Promise.all([
-      transporter.sendMail(userMailOptions),
-      transporter.sendMail(adminMailOptions)
-    ]);
-  } catch (error) {
-    console.error('Pre-order email error:', error);
-    throw new Error('Failed to send email: ' + error.message);
+    console.log('✅ Saved to Google Sheets');
+  } catch (err) {
+    // Non-fatal — don't block the order
+    console.error('Sheets write failed (non-fatal):', err.message);
   }
 };
 
-// Main handler
+// ── SEND EMAILS ──────────────────────────────────────────
+const sendEmails = async (orderData) => {
+  const transporter = createTransporter();
+  const { name, email, phone, address, productType, quantity, pricing, orderId, timestamp } = orderData;
+  const fromEmail = process.env.ZOHO_EMAIL || 'info@aseflow.com';
+  const userName = name || 'there';
+
+  // ── CUSTOMER EMAIL ───────────────────────────────────
+  const userMail = {
+    from: fromEmail,
+    to: email,
+    subject: productType === 'trial'
+      ? 'Your Aseflow Trial Pack is Confirmed! 🎉'
+      : 'Your Aseflow Pre-Order is Confirmed! 🎉',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+        <div style="background-color: #1A1A1A; padding: 30px; border-radius: 10px; text-align: center;">
+          <h1 style="color: #D4AF37; font-size: 32px; margin-bottom: 5px; font-weight: bold;">ASEFLOW</h1>
+          <p style="color: #D4AF37; font-size: 14px; margin-bottom: 30px; letter-spacing: 4px;">WELLNESS</p>
+
+          <h2 style="color: white; font-size: 22px; margin-bottom: 20px;">
+            ${productType === 'trial' ? 'Trial Pack Confirmed!' : 'Pre-Order Confirmed!'}
+          </h2>
+
+          <div style="background-color: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left;">
+            <p style="color: white; font-size: 16px; line-height: 1.6; margin: 0 0 16px 0;">
+              Hi ${userName},<br><br>
+              Thank you for your order! We've received it and will be in touch with your delivery details soon.
+            </p>
+
+            <table style="width: 100%; border-collapse: collapse; color: white; font-size: 14px;">
+              ${orderId ? `<tr><td style="padding: 6px 0; color: #aaa;">Order ID</td><td style="padding: 6px 0; text-align: right; font-weight: bold; color: #D4AF37;">${orderId}</td></tr>` : ''}
+              <tr><td style="padding: 6px 0; color: #aaa;">Product</td><td style="padding: 6px 0; text-align: right;">${pricing.label}</td></tr>
+              <tr><td style="padding: 6px 0; color: #aaa;">Shots</td><td style="padding: 6px 0; text-align: right;">${pricing.shots} × ${quantity}</td></tr>
+              <tr><td style="padding: 6px 0; color: #aaa;">Unit Price</td><td style="padding: 6px 0; text-align: right;">₹${pricing.unitPrice}</td></tr>
+              <tr style="border-top: 1px solid rgba(255,255,255,0.1);">
+                <td style="padding: 10px 0; font-size: 16px; font-weight: bold;">Total</td>
+                <td style="padding: 10px 0; text-align: right; font-size: 18px; font-weight: bold; color: #D4AF37;">₹${pricing.totalAmount}</td>
+              </tr>
+              <tr><td style="padding: 4px 0; color: #aaa; font-size: 12px;" colspan="2">Payment will be collected upon delivery</td></tr>
+            </table>
+          </div>
+
+          <div style="background-color: #D4AF37; color: #1A1A1A; padding: 12px 20px; border-radius: 8px; font-size: 16px; font-weight: bold; margin: 20px 0;">
+            Your discount code: ASE30 — 30% OFF next order!
+          </div>
+
+          <p style="color: #aaa; font-size: 14px; margin: 20px 0;">
+            Address: ${address}
+          </p>
+
+          <div style="margin: 24px 0;">
+            <p style="color: #D4AF37; font-size: 16px; font-weight: bold; letter-spacing: 2px;">RIP IT. SIP IT. REPEAT.</p>
+          </div>
+
+          <p style="color: white; font-size: 14px;">
+            Questions? Reply to this email or WhatsApp us.<br>
+            <strong style="color: #D4AF37;">— Team Aseflow</strong>
+          </p>
+        </div>
+      </div>
+    `,
+    text: `Hi ${userName},\n\nYour ${pricing.label} order is confirmed!\n\nProduct: ${pricing.label} (${pricing.shots})\nQuantity: ${quantity}\nTotal: ₹${pricing.totalAmount}\nPayment on delivery.\n\nDiscount code for next order: ASE30 (30% OFF)\n\n— Team Aseflow`
+  };
+
+  // ── ADMIN EMAIL ──────────────────────────────────────
+  const adminMail = {
+    from: fromEmail,
+    to: fromEmail,
+    subject: `🛒 New ${pricing.label} Order — ${name} — ₹${pricing.totalAmount}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #1A1A1A; border-bottom: 3px solid #D4AF37; padding-bottom: 10px;">
+          New Order Received
+        </h2>
+
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #D4AF37; margin-bottom: 20px;">
+          <h3 style="color: #1A1A1A; margin-top: 0;">Customer</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Address:</strong> ${address}</p>
+        </div>
+
+        <div style="background-color: #1A1A1A; padding: 20px; border-radius: 8px; color: white;">
+          <h3 style="color: #D4AF37; margin-top: 0;">Order Details</h3>
+          ${orderId ? `<p><strong style="color:#aaa">Order ID:</strong> <span style="color:#D4AF37">${orderId}</span></p>` : ''}
+          <p><strong style="color:#aaa">Product:</strong> ${pricing.label}</p>
+          <p><strong style="color:#aaa">Shots per pack:</strong> ${pricing.shots}</p>
+          <p><strong style="color:#aaa">Quantity:</strong> ${quantity}</p>
+          <p><strong style="color:#aaa">Unit Price:</strong> ₹${pricing.unitPrice}</p>
+          <p><strong style="color:#aaa">MRP:</strong> <span style="text-decoration:line-through">₹${pricing.originalAmount}</span></p>
+          <p style="font-size: 20px;"><strong style="color:#D4AF37">Total: ₹${pricing.totalAmount}</strong> (${pricing.discount} off)</p>
+          <p><strong style="color:#aaa">Time:</strong> ${timestamp}</p>
+        </div>
+      </div>
+    `,
+    text: `New Order\n\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\n\nProduct: ${pricing.label}\nShots: ${pricing.shots}\nQty: ${quantity}\nTotal: ₹${pricing.totalAmount}\nTime: ${timestamp}`
+  };
+
+  await Promise.all([
+    transporter.sendMail(userMail),
+    transporter.sendMail(adminMail)
+  ]);
+
+  console.log(`✅ Emails sent — customer: ${email}, admin: ${fromEmail}`);
+};
+
+// ── MAIN HANDLER ─────────────────────────────────────────
 exports.handler = async (event) => {
-
-  if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
-  }
-
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ error: 'Method not allowed' }),
-    };
-  }
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
+  if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
 
   try {
     const body = JSON.parse(event.body || '{}');
     const { name, email, phone, address, productType, quantity } = body;
 
-    // Env check
+    // ── ENV CHECK ──────────────────────────────────────
     if (!process.env.ZOHO_EMAIL || !process.env.ZOHO_PASSWORD) {
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: 'Email service not configured properly' }),
-      };
+      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Email service not configured' }) };
     }
 
-    // Validation
+    // ── VALIDATION ─────────────────────────────────────
     if (!name || name.trim().length < 2)
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Name must be at least 2 characters' }) };
 
@@ -486,53 +223,48 @@ exports.handler = async (event) => {
     if (!address || address.trim().length < 10)
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Address must be at least 10 characters' }) };
 
-    if (!productType || !['marine', 'vegan'].includes(productType))
-      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Product must be marine or vegan' }) };
+    // ✅ FIX: trial, marine, vegan all accepted
+    if (!productType || !['marine', 'vegan', 'trial'].includes(productType))
+      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Product must be trial, marine or vegan' }) };
 
     if (!quantity || quantity < 1 || quantity > 50)
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Quantity must be between 1 and 50' }) };
 
-    const numericId = await getNextOrderId();
-    const orderId = formatOrderId(numericId);
-    await sendPreOrderEmail({
-      ...body,
-      quantity: parseInt(body.quantity),
-      orderId
+    // ── PREPARE ORDER DATA ─────────────────────────────
+    const qty = parseInt(quantity) || 1;
+    const pricing = getPricing(productType, qty);
+    const timestamp = new Date().toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'long', year: 'numeric', month: 'long',
+      day: 'numeric', hour: 'numeric', minute: '2-digit',
+      hour12: true, timeZoneName: 'short'
     });
 
-    // Save to Google Sheets via SheetDB
-    try {
-      const qty = parseInt(body.quantity);
-      const totalAmount = qty * 2999;
-      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-      await fetch('https://sheetdb.io/api/v1/6eixxsivvae5n', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          data: [{
-            'Order ID': `#${orderId}`,
-            'Name': name,
-            'Email': email,
-            'Phone': phone,
-            'Address': address,
-            'Product Type': productType === 'marine' ? 'Marine Protein Shot' : 'Vegan Protein Shot',
-            'Quantity': qty,
-            'Total Amount': `₹${totalAmount}`,
-            'Timestamp': timestamp
-          }],
-          sheet: 'PreOrders'
-        })
-      });
-    } catch (sheetErr) {
-      console.error('SheetDB error:', sheetErr);
-      // Don't fail the order if sheets fails
-    }
+    // Generate order ID
+    const now = new Date();
+    const month = now.toLocaleString('en-IN', { month: 'short', timeZone: 'Asia/Kolkata' }).toUpperCase();
+    const year = now.getFullYear();
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    const orderId = `ASF-PRE-${year}-${month}-${rand}`;
+
+    const orderData = { name, email, phone, address, productType, quantity: qty, pricing, orderId, timestamp };
+
+    // ── SEND EMAILS + SAVE TO SHEETS ──────────────────
+    await Promise.all([
+      sendEmails(orderData),
+      saveToSheets(orderData)
+    ]);
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ success: true, message: 'Pre-order confirmed! Check your email for details.' }),
+      body: JSON.stringify({
+        success: true,
+        message: 'Order confirmed! Check your email for details.',
+        orderId
+      }),
     };
+
   } catch (error) {
     console.error('Handler error:', error);
     return {
@@ -542,4 +274,3 @@ exports.handler = async (event) => {
     };
   }
 };
-
