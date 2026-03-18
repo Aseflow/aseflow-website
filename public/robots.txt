@@ -1,4 +1,18 @@
 User-agent: *
 Allow: /
+Disallow: /netlify/
+Disallow: /.netlify/
+
+# Priority crawl paths
+Allow: /#products
+Allow: /#order
+Allow: /#benefits
+
+# Image crawling
+Allow: /aseflow_website_photo.png
+Allow: /Favicon.png
 
 Sitemap: https://aseflow.com/sitemap.xml
+
+# Crawl-delay for bots
+Crawl-delay: 10
