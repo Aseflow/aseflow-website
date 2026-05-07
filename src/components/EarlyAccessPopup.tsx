@@ -11,19 +11,20 @@ const EarlyAccessPopup = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Only hide permanently after they successfully submitted email
-    const hasSignedUp = localStorage.getItem('aseflow_early_access_submitted');
-    if (!hasSignedUp) {
+    const hasSeenPopup = localStorage.getItem('aseflow_early_access_seen');
+
+    if (!hasSeenPopup) {
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 3000);
+
       return () => clearTimeout(timer);
     }
   }, []);
 
   const handleClose = () => {
     setIsVisible(false);
-    // Do NOT save to localStorage on close - popup shows again next visit
+    localStorage.setItem('aseflow_early_access_seen', 'true');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,8 +47,7 @@ const EarlyAccessPopup = () => {
       trackEarlyAccessSubmit(email);
 
       setIsSuccess(true);
-      // Only save after successful submission - popup won't show again
-      localStorage.setItem('aseflow_early_access_submitted', 'true');
+      localStorage.setItem('aseflow_early_access_seen', 'true');
 
       setTimeout(() => {
         setIsVisible(false);
@@ -89,7 +89,7 @@ const EarlyAccessPopup = () => {
                 </h2>
 
                 <p className="text-gray-600 text-lg font-light leading-relaxed">
-                  Be the first to experience India's revolutionary liquid protein shot. Limited slots available.
+                  Be the first to experience a revolutionary new approach to nutrition. Limited slots available.
                 </p>
               </div>
 
