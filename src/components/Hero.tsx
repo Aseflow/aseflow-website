@@ -23,10 +23,10 @@ const Hero = () => {
 
       <div className="container mx-auto px-6 text-center max-w-4xl">
 
-        {/* India's First — tiny, quiet, confident */}
+        
         <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <p className="text-xs font-medium tracking-[0.3em] text-gray-400 uppercase mb-16">
-            India's First Liquid Protein Shot
+            
           </p>
         </div>
 
