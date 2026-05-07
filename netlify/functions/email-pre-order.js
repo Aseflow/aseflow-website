@@ -113,7 +113,7 @@ const sendPreOrderEmail = async (orderData) => {
         <!-- Header -->
         <div style="padding-bottom: 24px; border-bottom: 1px solid #e5e5e5; margin-bottom: 40px;">
           <p style="margin: 0 0 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.2em; color: #111;">ASEFLOW</p>
-          <p style="margin: 0; font-size: 11px; letter-spacing: 0.15em; color: #999; text-transform: uppercase;">India's First Liquid Protein Shot</p>
+          <p style="margin: 0; font-size: 11px; letter-spacing: 0.15em; color: #999; text-transform: uppercase;"></p>
         </div>
 
         <!-- Status label -->
