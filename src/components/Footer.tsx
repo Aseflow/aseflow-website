@@ -14,7 +14,7 @@ const Footer = () => {
                 Aseflow
               </h3>
               <p className="text-gray-400 font-light mt-2">
-                India's First Liquid Protein Shot
+                
               </p>
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed font-light text-sm">
