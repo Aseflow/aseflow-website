@@ -228,10 +228,10 @@ const sendPreOrderEmail = async (orderData) => {
 // ── SAVE TO GOOGLE SHEETS via SheetDB ───────────────────
 const saveToSheets = async (orderData, pricing, timestamp) => {
   try {
-    const { name, email, phone, address, productType, quantity, orderId } = orderData;
+    const { name, email, phone, address, quantity, orderId } = orderData;
     const qty = parseInt(quantity);
 
-    await fetch('https://sheetdb.io/api/v1/6eixxsivvae5n', {
+    const response = await fetch('https://sheetdb.io/api/v1/6eixxsivvae5n', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -242,17 +242,16 @@ const saveToSheets = async (orderData, pricing, timestamp) => {
           'Phone': phone,
           'Address': address,
           'Product Type': pricing.label,
-          'Pack Size': pricing.shots,
           'Quantity': qty,
-          'Unit Price': `₹${pricing.unitPrice}`,
           'Total Amount': `₹${pricing.total}`,
-          'Discount': pricing.discount,
           'Timestamp': timestamp
         }],
         sheet: 'PreOrders'
       })
     });
-    console.log('✅ Saved to Google Sheets');
+
+    const result = await response.json();
+    console.log('✅ Saved to Google Sheets:', JSON.stringify(result));
   } catch (err) {
     console.error('SheetDB error (non-fatal):', err.message);
   }
