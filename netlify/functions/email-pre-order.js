@@ -252,8 +252,8 @@ const saveToSheets = async (orderData, pricing, timestamp) => {
       redirect: 'follow'
     });
 
-    const result = await response.json();
-    console.log('✅ Saved to Google Sheets:', JSON.stringify(result));
+    const result = await response.text();
+    console.log('✅ Saved to Google Sheets:', result);
   } catch (err) {
     console.error('Sheets write error (non-fatal):', err.message);
   }
@@ -288,15 +288,23 @@ exports.handler = async (event) => {
     const numericId = await getNextOrderId();
     const orderId = formatOrderId(numericId);
 
-    const orderData = { ...body, quantity: parseInt(quantity), orderId };
+    // Compute pricing and timestamp upfront
+    const qty = parseInt(quantity);
+    const pricing = getPricing(productType, qty);
+    const timestamp = new Date().toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'long', year: 'numeric', month: 'long',
+      day: 'numeric', hour: 'numeric', minute: '2-digit',
+      hour12: true, timeZoneName: 'short'
+    });
 
-    // Send emails and save to sheets in parallel
-    const [emailResult] = await Promise.all([
+    const orderData = { ...body, quantity: qty, orderId };
+
+    // Run email AND sheets together — both must complete before returning
+    await Promise.all([
       sendPreOrderEmail(orderData),
+      saveToSheets(orderData, pricing, timestamp)
     ]);
-
-    // Save to sheets after (non-blocking)
-    saveToSheets(orderData, emailResult.pricing, emailResult.timestamp).catch(console.error);
 
     return {
       statusCode: 200,
