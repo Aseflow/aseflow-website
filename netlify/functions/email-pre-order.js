@@ -225,35 +225,32 @@ const sendPreOrderEmail = async (orderData) => {
   return { pricing, timestamp };
 };
 
-// ── SAVE TO GOOGLE SHEETS via SheetDB ───────────────────
+// ── SAVE TO GOOGLE SHEETS via Apps Script ────────────────
 const saveToSheets = async (orderData, pricing, timestamp) => {
   try {
     const { name, email, phone, address, quantity, orderId } = orderData;
     const qty = parseInt(quantity);
 
-    const response = await fetch('https://sheetdb.io/api/v1/6eixxsivvae5n', {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbwSgCqCRaNgs9KqIulQnfxoiCPZ3Ke6rwafCN8Owk138fijHOIFz0LVRo8LhB61fZPD/exec', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        data: [{
-          'Order ID': orderId,
-          'Name': name,
-          'Email': email,
-          'Phone': phone,
-          'Address': address,
-          'Product Type': pricing.label,
-          'Quantity': qty,
-          'Total Amount': `₹${pricing.total}`,
-          'Timestamp': timestamp
-        }],
-        sheet: 'PreOrders'
+        'Order ID': orderId,
+        'Name': name,
+        'Email': email,
+        'Phone': phone,
+        'Address': address,
+        'Product Type': pricing.label,
+        'Quantity': qty,
+        'Total Amount': `₹${pricing.total}`,
+        'Timestamp': timestamp
       })
     });
 
     const result = await response.json();
-    console.log('✅ Saved to Google Sheets:', JSON.stringify(result));
+    console.log('✅ Saved to Google Sheets via Apps Script:', JSON.stringify(result));
   } catch (err) {
-    console.error('SheetDB error (non-fatal):', err.message);
+    console.error('Sheets write error (non-fatal):', err.message);
   }
 };
 
