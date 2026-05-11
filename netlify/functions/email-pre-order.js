@@ -231,24 +231,29 @@ const saveToSheets = async (orderData, pricing, timestamp) => {
     const { name, email, phone, address, quantity, orderId } = orderData;
     const qty = parseInt(quantity);
 
-    const response = await fetch('https://script.google.com/macros/s/AKfycbwSgCqCRaNgs9KqIulQnfxoiCPZ3Ke6rwafCN8Owk138fijHOIFz0LVRo8LhB61fZPD/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        'Order ID': orderId,
-        'Name': name,
-        'Email': email,
-        'Phone': phone,
-        'Address': address,
-        'Product Type': pricing.label,
-        'Quantity': qty,
-        'Total Amount': `₹${pricing.total}`,
-        'Timestamp': timestamp
-      })
+    const data = {
+      'Order ID': orderId,
+      'Name': name,
+      'Email': email,
+      'Phone': phone,
+      'Address': address,
+      'Product Type': pricing.label,
+      'Quantity': qty,
+      'Total Amount': `₹${pricing.total}`,
+      'Timestamp': timestamp
+    };
+
+    // Use GET with URL params — Apps Script redirects POST and loses body
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbwSgCqCRaNgs9KqIulQnfxoiCPZ3Ke6rwafCN8Owk138fijHOIFz0LVRo8LhB61fZPD/exec';
+    const url = `${scriptUrl}?data=${encodeURIComponent(JSON.stringify(data))}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      redirect: 'follow'
     });
 
     const result = await response.json();
-    console.log('✅ Saved to Google Sheets via Apps Script:', JSON.stringify(result));
+    console.log('✅ Saved to Google Sheets:', JSON.stringify(result));
   } catch (err) {
     console.error('Sheets write error (non-fatal):', err.message);
   }
